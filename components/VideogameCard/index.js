@@ -19,7 +19,7 @@ export default ({ videogame }) => {
           styles.averageRating,
           videogame.averageRating >= 7
             ? { color: 'green' }
-            : videogame.averageRating < 7 && videogame.averageRating > 5
+            : videogame.averageRating < 7 && videogame.averageRating >= 5
             ? { color: 'yellow' }
             : { color: 'red' },
         ]}
