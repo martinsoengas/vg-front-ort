@@ -1,12 +1,17 @@
 import axios from 'axios';
+
 import apiUrl from '../../config/api';
 
 import { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
+import ImagePickerExample from '../../components/ImagePicker';
+
 import Navbar from '../../components/Navbar';
 
 import { UserContext } from '../../services/userContext';
+
+import { uploadImage } from '../../hooks/useFirebase';
 
 export default ({ navigation }) => {
   const { user } = useContext(UserContext);
@@ -14,15 +19,23 @@ export default ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [genre, setGenre] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(null);
 
   const handleCreateGame = async () => {
+    if (!title || !description || !genre || !image) {
+      return alert('Please fill all the required fields');
+    }
+
+    image.fileName = image.uri.match(/([^/]+\.[^/]+)$/)[1];
+
+    await uploadImage(image);
+
     const newVideogame = {
       title,
       description,
       genre,
-      image,
       developerId: user.id,
+      image: image.fileName,
     };
 
     try {
@@ -73,13 +86,16 @@ export default ({ navigation }) => {
           onChangeText={setGenre}
           keyboardType="default"
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Image URL *"
           value={image}
           onChangeText={setImage}
           keyboardType="default"
-        />
+        /> */}
+        <View style={styles.buttonsContainer}>
+          <ImagePickerExample imageState={{ image, setImage }} />
+        </View>
         <View style={styles.buttonsContainer}>
           <Button title="Add Game" onPress={handleCreateGame} />
           <Button title="Cancel" onPress={() => navigation.navigate('Home')} />

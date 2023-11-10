@@ -2,7 +2,7 @@ import axios from 'axios';
 import apiUrl from '../../config/api';
 
 import { useState, useContext, useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 import Videogames from '../../components/Videogames';
@@ -34,6 +34,19 @@ export default ({ navigation, route }) => {
   return (
     <View style={styles.bodyContainer}>
       <Navbar user={user} setUser={setUser} navigation={navigation} />
+      {user && (
+        <Text
+          style={{
+            width: '100%',
+            color: 'white',
+            textAlign: 'center',
+            padding: 10,
+            fontSize: 20,
+          }}
+        >
+          Hello {user.companyName ? user.companyName : user?.username || ''}!
+        </Text>
+      )}
       <Videogames videogames={videogames} navigation={navigation} />
     </View>
   );

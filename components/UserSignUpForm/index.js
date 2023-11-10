@@ -15,7 +15,7 @@ export default ({ navigation, setRole }) => {
     if (!username || !email || !password || !confirmPassword)
       return alert('Please fill all the fields');
     try {
-      const { data } = await axios.post(`${apiUrl}/users/signin`, {
+      const { data } = await axios.post(`${apiUrl}/users/signup`, {
         username,
         email,
         password,
@@ -23,7 +23,7 @@ export default ({ navigation, setRole }) => {
       });
 
       if (data.failed) {
-        return alert('User or password incorrect');
+        return alert(data.failed);
       }
 
       alert('You have registered successfully, please log in');

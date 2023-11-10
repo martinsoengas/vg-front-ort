@@ -1,18 +1,38 @@
+import { useEffect, useState } from 'react';
+import { getImageUrl } from '../../hooks/useFirebase';
 import { View, Image, Text, StyleSheet } from 'react-native';
 
 export default ({ videogame }) => {
+  const [imageUrl, setImageUrl] = useState('');
+
+  const getImage = async () => {
+    try {
+      await getImageUrl(videogame.image).then((url) => {
+        setImageUrl(url);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getImage();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Image
-        style={{
-          width: '100%',
-          height: 150,
-        }}
-        resizeMode="cover"
-        source={{
-          uri: videogame.image,
-        }}
-      />
+      {imageUrl && (
+        <Image
+          style={{
+            width: '100%',
+            height: 150,
+          }}
+          resizeMode="cover"
+          source={{
+            uri: imageUrl,
+          }}
+        />
+      )}
 
       <Text
         style={[
