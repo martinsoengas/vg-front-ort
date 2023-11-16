@@ -8,7 +8,6 @@ export default ({ videogames, navigation }) => {
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('Videogame', { item })}
-        // onLongPress={() => console.log("hago click intenso")}
       >
         <VideogameCard videogame={item} />
       </TouchableOpacity>

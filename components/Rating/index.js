@@ -7,11 +7,11 @@ export default ({ ratingState, addRating, alreadyRated, updateRating }) => {
 
   const determineCircleColor = (rating) => {
     if (rating >= 7) {
-      return '#4CAF50'; // Verde
+      return '#4CAF50';
     } else if (rating >= 5) {
-      return '#FFC107'; // Amarillo
+      return '#FFC107';
     } else {
-      return '#FF0000'; // Rojo
+      return '#FF0000';
     }
   };
 

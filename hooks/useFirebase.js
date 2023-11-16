@@ -1,8 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-// import firebase from 'firebase';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 const firebaseConfig = {
   apiKey: 'AIzaSyChcQY5_rPKAWRyEMwmjz8dSUgFW6lu4gg',
@@ -21,8 +18,8 @@ const uploadImage = async (image) => {
   const storageRef = ref(storage, 'images/' + image.fileName);
   try {
     const response = await fetch(image.uri);
-    console.log(response);
     const blob = await response.blob();
+
     await uploadBytes(storageRef, blob);
     console.log('Imagen subida exitosamente');
   } catch (error) {

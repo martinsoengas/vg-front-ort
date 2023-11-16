@@ -1,20 +1,30 @@
-import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
-import Rating from '../Rating';
-
-import { useEffect, useState, useContext, useCallback } from 'react';
 import axios from 'axios';
 import apiUrl from '../../config/api';
+import Rating from '../Rating';
+import { useEffect, useState, useContext, useCallback } from 'react';
+import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-
+import { getImageUrl } from '../../hooks/useFirebase';
 import { UserContext } from '../../services/userContext';
 
 export default ({ navigation, videogame, developer }) => {
+  const { user } = useContext(UserContext);
+
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState('');
   const [alreadyRated, setAlreadyRated] = useState(false);
   const [ratingId, setRatingId] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
-  const { user } = useContext(UserContext);
+  const getImage = async () => {
+    try {
+      await getImageUrl(videogame.image).then((url) => {
+        setImageUrl(url);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getRating = async () => {
     const query = `?videogameId=${videogame.id}&developerId=${developer.id}&userId=${user.id}`;
@@ -70,7 +80,9 @@ export default ({ navigation, videogame, developer }) => {
     }, [])
   );
 
-  useEffect(() => {}, [rating]);
+  useEffect(() => {
+    getImage();
+  }, [rating]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
@@ -81,13 +93,15 @@ export default ({ navigation, videogame, developer }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Image
-          style={{ width: '100%', height: 300 }}
-          resizeMode="contain"
-          source={{
-            uri: videogame.image,
-          }}
-        />
+        {imageUrl && (
+          <Image
+            style={{ width: '100%', height: 300 }}
+            resizeMode="contain"
+            source={{
+              uri: imageUrl,
+            }}
+          />
+        )}
       </View>
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
